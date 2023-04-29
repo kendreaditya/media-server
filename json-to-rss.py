@@ -1,49 +1,49 @@
 import json
-import xml.etree.ElementTree as ET
+from typing import List
+from dataclasses import dataclass
+from utils import Channel, Item
 
-with open('/Users/kendreaditya/Documents/workspace/BlackHole-playlist/playlists/GGM.json') as f:
-    data = json.load(f)
+def json_to_rss(json_filename: str, rss_filename: str):
+    with open(json_filename) as f:
+        data = json.load(f)
 
-rss = ET.Element('rss', version='2.0')
-channel = ET.SubElement(rss, 'channel')
-title = ET.SubElement(channel, 'title')
-title.text = 'Music List'
+    items = []
+    for item_id in data.keys():
+        item = Item(
+            author=data[item_id]['Srila BV Swami Prabhupada'],
+            title=data[item_id]['title'],
+            enclosure_url=data[item_id]['url'],
+            enclosure_type="audio/mpeg",
+            enclosure_length=data[item_id]['duration'],
+            guid=data[item_id]['guid'],
+            description=data[item_id]['album'],
+            image=data[item_id]['image']
+        )
+        items.append(item)
 
-for key, value in data.items():
-    item = ET.SubElement(channel, 'item')
-    url = ET.SubElement(item, 'url')
-    url.text = value['url']
-    perma_url = ET.SubElement(item, 'perma_url')
-    perma_url.text = value['perma_url']
-    title = ET.SubElement(item, 'title')
-    title.text = value['title']
-    album = ET.SubElement(item, 'album')
-    album.text = value['album']
-    artist = ET.SubElement(item, 'artist')
-    artist.text = value['artist']
-    duration = ET.SubElement(item, 'duration')
-    duration.text = value['duration']
-    image = ET.SubElement(item, 'image')
-    image.text = value['image']
-    subtitle = ET.SubElement(item, 'subtitle')
-    subtitle.text = value['subtitle']
-    expire_at = ET.SubElement(item, 'expire_at')
-    expire_at.text = value['expire_at']
-    release_date = ET.SubElement(item, 'release_date')
-    release_date.text = str(value['release_date'])
-    genre = ET.SubElement(item, 'genre')
-    genre.text = value['genre']
-    has_lyrics = ET.SubElement(item, 'has_lyrics')
-    has_lyrics.text = value['has_lyrics']
-    language = ET.SubElement(item, 'language')
-    language.text = value['language']
-    dataAdded = ET.SubElement(item, 'dataAdded')
-    dataAdded.text = value['dataAdded']
-    item_id = ET.SubElement(item, 'id')
-    item_id.text = key
-    album_id = ET.SubElement(item, 'album_id')
-    album_id.text = value['album_id']
+    channel = Channel(
+        title=channel_data['title'],
+        googleplay_author=channel_data['googleplay_author'],
+        rawvoice_rating=channel_data['rawvoice_rating'],
+        rawvoice_location=channel_data['rawvoice_location'],
+        rawvoice_frequency=channel_data['rawvoice_frequency'],
+        author=channel_data['author'],
+        image_url=channel_data['image_url'],
+        image_title=channel_data['image_title'],
+        image_link=channel_data['image_link'],
+        copyright=channel_data['copyright'],
+        description=channel_data['description'],
+        googleplay_image_href=channel_data['googleplay_image_href'],
+        language=channel_data['language'],
+        itunes_explicit=channel_data['itunes_explicit'],
+        pub_date=channel_data['pub_date'],
+        link=channel_data['link'],
+        items=items
+    )
 
-xml_data = ET.tostring(rss)
-with open('music.xml', 'wb') as f:
-    f.write(xml_data)
+    channel.to_rss(rss_filename)
+
+json_to_rss('/Users/kendreaditya/Documents/workspace/BlackHole-playlist/playlists/RGS.json', 'RGS.rss')
+    
+
+
