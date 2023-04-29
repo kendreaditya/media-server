@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<opml version="1.0">
+  <head>
+    <title>My RSS Feeds</title>
+  </head>
+  <body>
+    <outline type="rss" text="RSS Feed 1" title="RSS Feed 1" xmlUrl="https://raw.githubusercontent.com/kendreaditya/media-server/main/RGS-rss.xml" />
+  </body>
+</opml>
+
